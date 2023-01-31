@@ -41,9 +41,4 @@ public class RegistrationSpecs {
             .expectStatusCode(400)
             .build();
 
-    public static ResponseSpecification singleUserResponseSpec = new ResponseSpecBuilder()
-            .log(STATUS)
-            .log(BODY)
-            .expectStatusCode(200)
-            .build();
 }
