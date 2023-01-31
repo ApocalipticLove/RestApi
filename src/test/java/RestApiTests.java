@@ -1,83 +1,71 @@
+import models.lombok.RegistrationBodyLombokModel;
+import models.lombok.RegistrationResponseLombokModel;
+import models.lombok.UnsuccessfulRegResponseLombokModel;
+import models.pojo.CreateUserBodyPojoModel;
+import models.pojo.CreateUserResponsePojoModel;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static specs.RegistrationSpecs.*;
 
 
 public class RestApiTests {
-    String baseUrl = "https://reqres.in/";
-
-    @Test
-    void singleUserTest() {
-        given()
-                .log().uri()
-                .baseUri(baseUrl)
-                .contentType(JSON)
-                .when()
-                .get("/api/users/2")
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
-                .body("data.first_name", is("Janet"));
-    }
 
    @Test
-   void createUserTest(){
-       String body = "{ \"name\": \"Mr.Smith\", \"job\": \"security\"}";
+   void createUserWithPojoTest(){
+       CreateUserBodyPojoModel data = new CreateUserBodyPojoModel();
+       data.setName("Mr.Smith");
+       data.setJob("security");
 
-       given()
-               .log().uri()
-               .contentType(JSON)
-               .body(body)
+       CreateUserResponsePojoModel response = given(requestSpec)
+               .body(data)
                .when()
-               .post("https://reqres.in/api/users")
+               .post("/users")
                .then()
-               .log().status()
-               .log().body()
-               .statusCode(201)
-               .body("name", is("Mr.Smith"))
-               .body("job", is("security"));
+               .spec(createUserResponseSpec)
+               .extract().as(CreateUserResponsePojoModel.class);
+       assertThat(response.getName()).isEqualTo("Mr.Smith");
+       assertThat(response.getJob()).isEqualTo("security");
+
 
    }
     @Test
     void unsuccessfulRegistrationTest() {
-
-        given()
-                .log().uri()
+        RegistrationBodyLombokModel data = new RegistrationBodyLombokModel();
+        data.setEmail("sydney@fife");
+        UnsuccessfulRegResponseLombokModel response = given(requestSpec)
+                .body(data)
                 .when()
-                .post("https://reqres.in/api/register")
+                .post("/register")
                 .then()
-                .log().status()
-                .statusCode(415);
+                .spec(unsuccessfulRegistrationResponseSpec)
+                .extract().as(UnsuccessfulRegResponseLombokModel.class);
+        assertThat(response.getError()).isEqualTo("Missing password");
     }
 
     @Test
-    void successfulRegistrationTest() {
-        String data = "{ \"email\": \"eve.holt@reqres.in\", \"password\": \"pistol\" }";
+    void successfulRegistrationWithLombokTest() {
+        RegistrationBodyLombokModel data = new RegistrationBodyLombokModel();
+        data.setEmail("eve.holt@reqres.in");
+        data.setPassword("pistol");
 
-        given()
-                .log().uri()
-                .contentType(JSON)
+        RegistrationResponseLombokModel response = given(requestSpec)
                 .body(data)
                 .when()
-                .post("https://reqres.in/api/register")
+                .post("/register")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
-                .body("id", is(notNullValue()))
-                .body("token", is(notNullValue()));
+                .spec(registrationResponseSpec)
+                .extract().as(RegistrationResponseLombokModel.class);
+        assertThat(response.getToken()).isEqualTo("QpwL5tke4Pnpja7X4");
+        assertThat(response.getId()).isEqualTo("4");
     }
     @Test
     void deleteUserTest() {
 
-        given()
-                .log().uri()
+        given(requestSpec)
                 .when()
-                .delete(baseUrl + "/users/2")
+                .delete("/users/2")
                 .then()
                 .statusCode(204);
     }
