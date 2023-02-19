@@ -40,7 +40,7 @@
 gradle clean test
 ```
 
-## <img width="4%" title="Jenkins" src="media/logo/Jenkins.svg"> Запуск тестов из [Jenkins](https://jenkins.autotests.cloud/job/015_aziyatdinov_final_api/)
+## <img width="4%" title="Jenkins" src="media/logo/Jenkins.svg"> Запуск тестов из [Jenkins](https://jenkins.autotests.cloud/job/API_final/)
 Для запуска сборки необходимо перейти в раздел <code><strong>*Собрать с параметрами*</strong></code> и нажать кнопку <code><strong>*Собрать*</strong></code>.
 
 <p align="center">
@@ -50,33 +50,22 @@ gradle clean test
 После выполнения сборки, в блоке <code><strong>*История сборок*</strong></code> напротив номера сборки появится
 значок *Allure Report* кликнув по которому, откроется страница с сформированным html-отчетом и тестовой документацией.
 
-## <img width="4%" title="Allure Report" src="media/logo/Allure_Report.svg"> Отчет о результатах тестирования в [Allure Report](https://jenkins.autotests.cloud/job/015_aziyatdinov_final_api/4/allure/)
+## <img width="4%" title="Allure Report" src="media/logo/Allure_Report.svg"> Отчет о результатах тестирования в [Allure Report](https://jenkins.autotests.cloud/job/API_final/1/allure/#)
 
 <p align="center">
   <img src="media/screen/jenkins_overview.png" alt="allure-report" width="900">
 </p>
 
-<p align="center">
-  <img src="media/screen/jenkins_behaviors.png" alt="allure-report_1" width="900">
-</p>
-
-
-### Основной дашборд
+### Основная страница с графиками
 
 <p align="center">
   <img src="media/screen/dashboards.png" alt="dashboard" width="900">
 </p>
 
-### Список тестов с результатами прогона
+### Тест кейсы в отчете allure
 
 <p align="center">
-  <img src="media/screen/allure-testops-results.png" alt="dashboard" width="900">
-</p>
-
-### Тест-кейсы
-
-<p align="center">
-  <img src="media/screen/allure-testops-testcases.png" alt="testcase" width="900">
+  <img src="media/screen/allure-results.png" alt="dashboard" width="900">
 </p>
 
 ## <img width="4%" title="Telegram" src="media/logo/Telegram.svg"> Уведомления в Telegram
