@@ -11,7 +11,7 @@ import static io.restassured.filter.log.LogDetail.STATUS;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class RegistrationSpecs {
+public class SpecsReqres {
     public static RequestSpecification requestSpec = with()
             .log().uri()
             .log().headers()
@@ -40,5 +40,7 @@ public class RegistrationSpecs {
             .log(BODY)
             .expectStatusCode(400)
             .build();
-
+    public static ResponseSpecification response = new ResponseSpecBuilder()
+            .expectStatusCode(200)
+            .build();
 }
