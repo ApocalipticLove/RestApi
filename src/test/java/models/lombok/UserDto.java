@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UnsuccessfulRegResponseLombokModel {
-    private String error;
+public class UserDto {
+    private Integer id;
+    private String email, firstName, lastName;
 }

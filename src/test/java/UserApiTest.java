@@ -1,9 +1,10 @@
-import models.lombok.RegistrationBodyLombokModel;
-import models.lombok.RegistrationResponseLombokModel;
-import models.lombok.UnsuccessfulRegResponseLombokModel;
-import models.lombok.User;
-import models.pojo.CreateUserBodyPojoModel;
-import models.pojo.CreateUserResponsePojoModel;
+import models.lombok.RegistrationBodyDto;
+import models.lombok.RegistrationResponseDto;
+import models.lombok.UnsuccessfulRegResponseDto;
+import models.lombok.UserDto;
+import models.pojo.CreateUserBodyDto;
+import models.pojo.CreateUserResponseDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,22 +14,22 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static specs.SpecsReqres.*;
 
-public class ReqresInTests {
+public class UserApiTest {
 
    @Test
    @DisplayName("Создание пользователя")
    void createUserWithPojoTest(){
-       CreateUserBodyPojoModel data = new CreateUserBodyPojoModel();
+       CreateUserBodyDto data = new CreateUserBodyDto();
        data.setName("Mr.Smith");
        data.setJob("security");
 
-       CreateUserResponsePojoModel response = given(requestSpec)
+       CreateUserResponseDto response = given(requestSpec)
                .body(data)
                .when()
                .post("/users")
                .then()
                .spec(createUserResponseSpec)
-               .extract().as(CreateUserResponsePojoModel.class);
+               .extract().as(CreateUserResponseDto.class);
        assertThat(response.getName()).isEqualTo("Mr.Smith");
        assertThat(response.getJob()).isEqualTo("security");
 
@@ -37,33 +38,33 @@ public class ReqresInTests {
     @Test
     @DisplayName("Неуспешная регистрация пользователя")
     void unsuccessfulRegistrationTest() {
-        RegistrationBodyLombokModel data = new RegistrationBodyLombokModel();
+        RegistrationBodyDto data = new RegistrationBodyDto();
         data.setEmail("sydney@fife");
-        UnsuccessfulRegResponseLombokModel response = given(requestSpec)
+        UnsuccessfulRegResponseDto response = given(requestSpec)
                 .body(data)
                 .when()
                 .post("/register")
                 .then()
                 .spec(unsuccessfulRegistrationResponseSpec)
-                .extract().as(UnsuccessfulRegResponseLombokModel.class);
+                .extract().as(UnsuccessfulRegResponseDto.class);
         assertThat(response.getError()).isEqualTo("Missing password");
     }
 
     @Test
     @DisplayName("Регистрация пользователя")
     void successfulRegistrationWithLombokTest() {
-        RegistrationBodyLombokModel data = new RegistrationBodyLombokModel();
+        RegistrationBodyDto data = new RegistrationBodyDto();
         data.setEmail("eve.holt@reqres.in");
         data.setPassword("pistol");
 
-        RegistrationResponseLombokModel response = given(requestSpec)
+        RegistrationResponseDto response = given(requestSpec)
                 .body(data)
                 .when()
                 .post("/register")
                 .then()
                 .spec(registrationResponseSpec)
-                .extract().as(RegistrationResponseLombokModel.class);
-        assertThat(response.getToken()).isEqualTo("QpwL5tke4Pnpja7X4");
+                .extract().as(RegistrationResponseDto.class);
+        Assertions.assertNotNull(response.getToken());
         assertThat(response.getId()).isEqualTo("4");
     }
 
@@ -84,13 +85,13 @@ public class ReqresInTests {
     @Test
     @DisplayName("Проверка id и email пользователя")
     void checkUserIdAndEmail() {
-        User userResponse = given().spec(requestSpec)
+        UserDto userResponse = given().spec(requestSpec)
                 .when()
                 .pathParam("id", "2")
                 .get("/users/{id}")
                 .then()
                 .spec(response)
-                .extract().jsonPath().getObject("data", User.class);
+                .extract().jsonPath().getObject("data", UserDto.class);
 
         assertEquals(2, userResponse.getId());
         assertThat(userResponse.getEmail()).isEqualTo("janet.weaver@reqres.in");

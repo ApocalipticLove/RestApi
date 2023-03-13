@@ -7,9 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CreateUserResponsePojoModel {
+public class CreateUserBodyDto {
     private String name;
     private String job;
-    private String id;
-    private String createdAt;
 }
